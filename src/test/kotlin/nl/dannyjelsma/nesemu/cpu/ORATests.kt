@@ -124,4 +124,57 @@ class ORATests {
 
         test.runTest()
     }
+
+    @Test
+    fun test_ORA_IMMEDIATE() {
+        val instruction = Instruction(Opcode.ORA_IMMEDIATE, 0x18u, 0x1811u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x02u))
+            .withProgramCounter(0x4293u)
+            .expectInstructionSize(2)
+            .expectCycles(2)
+            .expectProgramCounter(0x4295u)
+            .expectRegisters(mapOf("A" to (0x02u or 0x18u).toUByte()))
+            .expectNegativeFlag(false)
+            .expectZeroFlag(false)
+            .build()
+
+        test.runTest()
+    }
+
+    @Test
+    fun testNegative_ORA_IMMEDIATE() {
+        val instruction = Instruction(Opcode.ORA_IMMEDIATE, 0x18u, 0x1811u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x02u))
+            .withProgramCounter(0x4293u)
+            .expectInstructionSize(2)
+            .expectCycles(2)
+            .expectProgramCounter(0x4295u)
+            .expectRegisters(mapOf("A" to (0x02u or 0x18u).toUByte()))
+            .expectNegativeFlag(true)
+            .expectZeroFlag(false)
+            .build()
+
+        test.runTest()
+    }
+    @Test
+    fun testZero_ORA_IMMEDIATE() {
+        val instruction = Instruction(Opcode.ORA_IMMEDIATE, 0x00u, 0x0012u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x00u))
+            .withProgramCounter(0x4293u)
+            .expectInstructionSize(2)
+            .expectCycles(2)
+            .expectProgramCounter(0x4295u)
+            .expectRegisters(mapOf("A" to 0x0u))
+            .expectNegativeFlag(false)
+            .expectZeroFlag(true)
+            .build()
+
+        test.runTest()
+    }
 }

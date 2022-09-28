@@ -8,7 +8,8 @@ enum class Opcode(val opcode: UByte, val instructionSize: Int, val cycles: Int) 
     ORA_INDIRECT_X(0x01u, 2, 6),
     ORA_ZERO_PAGE(0x05u, 2, 3),
     ASL_ZERO_PAGE(0x06u, 2, 5),
-    PHP(0x08u, 1, 3),;
+    PHP(0x08u, 1, 3),
+    ORA_IMMEDIATE(0x09u, 2, 2);
 
     companion object {
         // Faster, but only works when everything is implemented
