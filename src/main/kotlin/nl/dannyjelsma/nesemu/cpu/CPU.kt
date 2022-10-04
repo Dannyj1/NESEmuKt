@@ -13,6 +13,7 @@ class CPU(private val nes: NES) {
     val pc = Register16("PC")
     val s = Register8("S")
     val p = FlagsRegister("P")
+    var cyclesToWait: Int = 0
 
     fun start() {
         p.value = 0x34u

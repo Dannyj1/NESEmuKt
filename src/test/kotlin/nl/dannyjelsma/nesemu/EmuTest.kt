@@ -21,17 +21,15 @@ class EmuTest(val nes: NES,
         if (instruction != null) {
             nes.cpu.executeInstruction(instruction)
 
-            if (expectedCycles != null) {
-                // TODO: might need to be changed after waiting has been properly implemented in the CPU
-                assertEquals(expectedCycles, instruction.opcode.cycles, "Opcode ${instruction.opcode.name} " +
-                        "has incorrect number of cycles")
-            }
-
             if (expectedInstructionSize != null) {
                 // TODO: might need to be changed after waiting has been properly implemented in the CPU
                 assertEquals(expectedInstructionSize, instruction.opcode.instructionSize,
                     "Opcode ${instruction.opcode.name} has incorrect instruction size")
             }
+        }
+
+        if (expectedCycles != null) {
+            assertEquals(expectedCycles, nes.cpu.cyclesToWait, "The emulator is waiting an incorrect number of cycles")
         }
 
         expectedRegisters?.forEach { (register, value) ->

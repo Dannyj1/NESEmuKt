@@ -1,6 +1,7 @@
 package nl.dannyjelsma.nesemu.ram
 
 import nl.dannyjelsma.nesemu.NES
+import kotlin.math.floor
 
 @OptIn(ExperimentalUnsignedTypes::class)
 class RAM(private val nes: NES) {
@@ -90,4 +91,8 @@ class RAM(private val nes: NES) {
     }
 
     // https://bugzmanov.github.io/nes_ebook/chapter_3_2.html
+
+    fun getPageNumber(address: UShort): UInt {
+        return floor((address / 256u).toDouble()).toUInt()
+    }
 }
