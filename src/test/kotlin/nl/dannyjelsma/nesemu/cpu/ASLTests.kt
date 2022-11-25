@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test
 
 class ASLTests {
 
-    private val defaultTestNES: NES = EmuTestBuilder().build().nes
-
     @Test
     fun test_ASL_ZERO_PAGE() {
         val instruction = Instruction(Opcode.ASL_ZERO_PAGE, 0x12u, 0x1291u)
@@ -79,6 +77,82 @@ class ASLTests {
             .expectMemory(mapOf(0x12u.toUShort() to (0x74u shl 1).toUByte()))
             .expectNegativeFlag(true)
             .expectZeroFlag(false)
+            .expectCarryFlag(false)
+            .build()
+
+        test.runTest()
+    }
+
+    @Test
+    fun test_ASL_ACCUMULATOR() {
+        val instruction = Instruction(Opcode.ASL_ACCUMULATOR, 0x12u, 0x1291u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x34u))
+            .withProgramCounter(0x0276u)
+            .expectProgramCounter(0x0277u)
+            .expectInstructionSize(1)
+            .expectCycles(2)
+            .expectRegisters(mapOf("A" to (0x34u shl 1).toUByte()))
+            .expectNegativeFlag(false)
+            .expectZeroFlag(false)
+            .expectCarryFlag(false)
+            .build()
+
+        test.runTest()
+    }
+
+    @Test
+    fun testNegative_ASL_ACCUMULATOR() {
+        val instruction = Instruction(Opcode.ASL_ZERO_PAGE, 0x12u, 0x1291u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x74u))
+            .withProgramCounter(0x0276u)
+            .expectProgramCounter(0x0277u)
+            .expectInstructionSize(1)
+            .expectCycles(2)
+            .expectRegisters(mapOf("A" to (0x74u shl 1).toUByte()))
+            .expectNegativeFlag(true)
+            .expectZeroFlag(false)
+            .expectCarryFlag(false)
+            .build()
+
+        test.runTest()
+    }
+
+    @Test
+    fun testCarry_ASL_ACCUMULATOR() {
+        val instruction = Instruction(Opcode.ASL_ZERO_PAGE, 0x12u, 0x1291u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0xB4u))
+            .withProgramCounter(0x0276u)
+            .expectProgramCounter(0x0277u)
+            .expectInstructionSize(1)
+            .expectCycles(2)
+            .expectRegisters(mapOf("A" to (0xB4u shl 1).toUByte()))
+            .expectNegativeFlag(false)
+            .expectZeroFlag(false)
+            .expectCarryFlag(true)
+            .build()
+
+        test.runTest()
+    }
+
+    @Test
+    fun testZero_ASL_ACCUMULATOR() {
+        val instruction = Instruction(Opcode.ASL_ACCUMULATOR, 0x12u, 0x1291u)
+        val test: EmuTest = EmuTestBuilder()
+            .withInstruction(instruction)
+            .withRegisters(mapOf("A" to 0x0u))
+            .withProgramCounter(0x0276u)
+            .expectProgramCounter(0x0277u)
+            .expectInstructionSize(1)
+            .expectCycles(2)
+            .expectRegisters(mapOf("A" to 0x0u))
+            .expectNegativeFlag(false)
+            .expectZeroFlag(true)
             .expectCarryFlag(false)
             .build()
 
